@@ -1,0 +1,93 @@
+import os
+
+class Library:
+    def __init__(self):
+        try:
+            if not os.path.exists("../../Desktop/books.txt"):
+                with open("../../Desktop/books.txt", "w"):
+                    pass
+        except Exception as e:
+            print(f"Error initializing the library: {e}")
+
+    def list_books(self):
+        try:
+            with open("../../Desktop/books.txt", "r") as file:
+                lines = file.readlines()
+                if not lines:
+                    print("No books in the library at the moment.")
+                else:
+                    for line in lines:
+                        book_info = line.strip().split(',')
+                        print(f"Book Title: {book_info[0]}, Author: {book_info[1]}, Release Year: {book_info[2]}, Number of Pages: {book_info[3]}")
+        except Exception as e:
+            print(f"Error listing books: {e}")
+
+    def add_book(self):
+        try:
+            title = input("Enter book title: ")
+            author = input("Enter book author: ")
+            release_year = input("Enter release year: ")
+            pages = input("Enter the number of pages: ")
+
+            book_info = f"{title},{author},{release_year},{pages}\n"
+
+            with open("../../Desktop/books.txt", "a") as file:
+                file.write(book_info)
+
+            print("Book added successfully.\nReturning To Main Menu...")
+        except Exception as e:
+            print(f"Error adding book: {e}")
+
+    def remove_book(self):
+        try:
+            title = input("Enter the title of the book to remove: ").lower()
+
+            found = False
+            with open("../../Desktop/books.txt", "r") as file:
+                lines = file.readlines()
+
+            with open("../../Desktop/books.txt", "w") as file:
+                for line in lines:
+                    if title not in line.lower():
+                        file.write(line)
+                    else:
+                        found = True  # Check if book is found before deleting
+
+            if found:
+                print("Book removed successfully.\nReturning To Main Menu")
+            else:
+                print("Book not found in the library.")
+        except Exception as e:
+            print(f"Error removing book: {e}")
+
+def main():
+    try:
+        lib = Library()
+
+        while True:
+            print("*****LIBRARY MANAGEMENT SYSTEM MENU*****")
+            print("1) List Books")
+            print("2) Add Book")
+            print("3) Remove Book")
+            print("4) Exit")
+
+            choice = input("Enter your choice (1, 2, 3, 4): ")
+
+            if choice == '1':
+                lib.list_books()
+            elif choice == '2':
+                lib.add_book()
+            elif choice == '3':
+                lib.remove_book()
+            elif choice == '4':
+                print("Closing program...")
+                break
+            else:
+                print("Invalid choice. Please enter again.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+if __name__ == "__main__":
+    main()
+
+print("Thank you for using the program")
